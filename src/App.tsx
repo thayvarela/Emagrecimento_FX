@@ -4,17 +4,31 @@ import { PlanDisplay } from './components/PlanDisplay.tsx';
 import { generatePlan } from './services/geminiService.ts';
 import { WeeklyPlan, TargetShape } from './types.ts';
 
+interface WeightInfo {
+  idealWeight: number;
+  weightToLose: number;
+}
+
 function App() {
   const [plan, setPlan] = useState<WeeklyPlan | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [weightInfo, setWeightInfo] = useState<WeightInfo | null>(null);
 
   const handleGeneratePlan = useCallback(async (weight: number, height: number, shape: TargetShape) => {
     setIsLoading(true);
     setError(null);
     setPlan(null);
+    setWeightInfo(null);
     
     try {
+      // Calculate ideal weight and weight to lose based on BMI
+      const heightInMeters = height / 100;
+      const targetBmi = 22.5; // A healthy BMI target
+      const idealWeight = targetBmi * (heightInMeters * heightInMeters);
+      const weightToLose = weight - idealWeight;
+      setWeightInfo({ idealWeight, weightToLose });
+
       const generatedPlan = await generatePlan(weight, height, shape);
       if (generatedPlan) {
         setPlan(generatedPlan);
@@ -65,8 +79,8 @@ function App() {
           </div>
         )}
 
-        {plan && (
-           <PlanDisplay planData={plan} />
+        {plan && weightInfo && (
+           <PlanDisplay planData={plan} weightInfo={weightInfo} />
         )}
       </main>
       <footer className="text-center py-6 text-slate-500 text-sm">

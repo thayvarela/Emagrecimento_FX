@@ -5,6 +5,10 @@ import DumbbellIcon from './icons/DumbbellIcon.tsx';
 
 interface PlanDisplayProps {
   planData: WeeklyPlan;
+  weightInfo: {
+    idealWeight: number;
+    weightToLose: number;
+  };
 }
 
 const DayCard: React.FC<{ dayPlan: DailyPlan }> = ({ dayPlan }) => (
@@ -45,12 +49,38 @@ const DayCard: React.FC<{ dayPlan: DailyPlan }> = ({ dayPlan }) => (
     </div>
 );
 
-export const PlanDisplay: React.FC<PlanDisplayProps> = ({ planData }) => {
+export const PlanDisplay: React.FC<PlanDisplayProps> = ({ planData, weightInfo }) => {
   const [activeDayIndex, setActiveDayIndex] = useState(0);
+
+  const renderWeightInfo = () => {
+    if (!weightInfo) return null;
+
+    const { idealWeight, weightToLose } = weightInfo;
+
+    if (weightToLose > 0) {
+      return (
+        <p>
+          Seu peso ideal é aproximadamente <span className="font-bold text-cyan-400">{idealWeight.toFixed(1)} kg</span>.
+          Você precisa perder cerca de <span className="font-bold text-cyan-400">{weightToLose.toFixed(1)} kg</span> para atingir sua meta.
+        </p>
+      );
+    } else {
+      return (
+        <p>
+          Parabéns! Seu peso atual está dentro da faixa ideal. Este plano irá ajudá-lo(a) a <span className="font-bold text-cyan-400">manter a forma e definir seus músculos</span>.
+        </p>
+      );
+    }
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto bg-slate-800/50 backdrop-blur-sm p-6 md:p-8 rounded-2xl shadow-lg border border-slate-700 animate-fade-in">
-        <h2 className="text-3xl font-bold text-center text-cyan-400 mb-6">Seu Plano Semanal Personalizado</h2>
+        <h2 className="text-3xl font-bold text-center text-cyan-400 mb-4">Seu Plano Semanal Personalizado</h2>
+
+        <div className="text-center bg-slate-900/60 border border-slate-700 rounded-lg p-4 mb-6 text-slate-300">
+          {renderWeightInfo()}
+        </div>
+
         <div className="mb-6 overflow-x-auto pb-2">
             <div className="flex space-x-2 md:justify-center">
                 {planData.plan.map((dayPlan, index) => (
