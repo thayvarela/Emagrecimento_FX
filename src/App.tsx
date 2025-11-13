@@ -71,6 +71,7 @@ function App() {
       </main>
       <footer className="text-center py-6 text-slate-500 text-sm">
         <p>Potencializado pela API do Google Gemini.</p>
+        <p className="mt-2">Desenvolvido com ❤️ por Thayna Felix e Sergio Marciano.</p>
       </footer>
     </div>
   );
