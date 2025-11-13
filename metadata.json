@@ -1,0 +1,5 @@
+{
+  "name": "Plano de Emagrecimento FX",
+  "description": "Um aplicativo que gera um plano de emagrecimento personalizado com dieta e treinos semanais. O usuário informa peso, altura e o tipo de físico desejado para receber um guia passo a passo.",
+  "requestFramePermissions": []
+}
