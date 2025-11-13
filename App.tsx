@@ -1,9 +1,9 @@
 
 import React, { useState, useCallback } from 'react';
-import { UserInputForm } from './components/UserInputForm';
-import { PlanDisplay } from './components/PlanDisplay';
-import { generatePlan } from './services/geminiService';
-import { WeeklyPlan, TargetShape } from './types';
+import { UserInputForm } from './components/UserInputForm.tsx';
+import { PlanDisplay } from './components/PlanDisplay.tsx';
+import { generatePlan } from './services/geminiService.ts';
+import { WeeklyPlan, TargetShape } from './types.ts';
 
 function App() {
   const [plan, setPlan] = useState<WeeklyPlan | null>(null);

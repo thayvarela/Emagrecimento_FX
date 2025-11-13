@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { WeeklyPlan, DailyPlan } from '../types';
-import CutleryIcon from './icons/CutleryIcon';
-import DumbbellIcon from './icons/DumbbellIcon';
+import { WeeklyPlan, DailyPlan } from '../types.ts';
+import CutleryIcon from './icons/CutleryIcon.tsx';
+import DumbbellIcon from './icons/DumbbellIcon.tsx';
 
 interface PlanDisplayProps {
   planData: WeeklyPlan;
