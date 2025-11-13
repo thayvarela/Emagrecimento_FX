@@ -4,38 +4,41 @@ Este é um aplicativo que gera um plano de emagrecimento personalizado com dieta
 
 ## Estrutura de Pastas e Arquivos
 
-A estrutura do projeto está organizada da seguinte forma para separar responsabilidades e facilitar a manutenção.
+A estrutura do projeto foi configurada para usar Vite, um moderno sistema de build que compila o código TypeScript e React para produção.
 
 ```
 .
-├── App.tsx
 ├── README.md
-├── components
-│   ├── icons
-│   │   ├── CutleryIcon.tsx
-│   │   └── DumbbellIcon.tsx
-│   ├── PlanDisplay.tsx
-│   └── UserInputForm.tsx
 ├── index.html
-├── index.tsx
-├── metadata.json
-├── services
-│   └── geminiService.ts
-└── types.ts
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── public/
+│   └── vite.svg (opcional)
+└── src/
+    ├── App.tsx
+    ├── index.tsx
+    ├── main.tsx
+    ├── types.ts
+    ├── components/
+    │   ├── PlanDisplay.tsx
+    │   ├── UserInputForm.tsx
+    │   └── icons/
+    │       ├── CutleryIcon.tsx
+    │       └── DumbbellIcon.tsx
+    └── services/
+        └── geminiService.ts
 ```
 
 ### Descrição dos Arquivos
 
--   **`index.html`**: O arquivo HTML principal, ponto de entrada da aplicação. Carrega os scripts necessários, incluindo React, TailwindCSS e o script principal da aplicação.
--   **`index.tsx`**: Ponto de entrada do React. Renderiza o componente principal `App` no DOM.
--   **`metadata.json`**: Contém metadados sobre a aplicação, como nome e descrição.
--   **`README.md`**: Este arquivo. Contém a documentação sobre o projeto.
--   **`App.tsx`**: O componente raiz da aplicação. Gerencia o estado principal (plano, carregamento, erros) e a lógica de renderização condicional.
--   **`types.ts`**: Define os tipos e interfaces TypeScript utilizados em toda a aplicação (ex: `WeeklyPlan`, `TargetShape`).
--   **`services/geminiService.ts`**: Módulo responsável pela comunicação com a API do Google Gemini. Contém a lógica para gerar o plano de emagrecimento, incluindo a definição do schema JSON esperado.
--   **`components/`**: Pasta contendo todos os componentes React reutilizáveis.
-    -   **`UserInputForm.tsx`**: Componente do formulário onde o usuário insere seus dados (peso, altura, objetivo).
-    -   **`PlanDisplay.tsx`**: Componente responsável por exibir o plano semanal gerado de forma organizada e interativa.
-    -   **`icons/`**: Pasta que contém os componentes de ícones SVG utilizados na interface.
-        -   **`CutleryIcon.tsx`**: Ícone de talheres.
-        -   **`DumbbellIcon.tsx`**: Ícone de haltere.
+-   **`index.html`**: O arquivo HTML principal e ponto de entrada para o Vite.
+-   **`package.json`**: Define os scripts do projeto (ex: `dev`, `build`) e as dependências (React, Vite, etc.).
+-   **`vite.config.ts`**: Arquivo de configuração para o Vite, onde definimos plugins e o acesso a variáveis de ambiente.
+-   **`tsconfig.json`**: Arquivo de configuração do TypeScript.
+-   **`src/`**: Pasta contendo todo o código-fonte da aplicação.
+    -   **`index.tsx` e `main.tsx`**: Ponto de entrada do React. Renderiza o componente principal `App` no DOM.
+    -   **`App.tsx`**: O componente raiz da aplicação. Gerencia o estado principal e a lógica de renderização.
+    -   **`types.ts`**: Define os tipos e interfaces TypeScript utilizados na aplicação.
+    -   **`services/geminiService.ts`**: Módulo responsável pela comunicação com a API do Google Gemini.
+    -   **`components/`**: Pasta contendo todos os componentes React reutilizáveis.
