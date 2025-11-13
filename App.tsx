@@ -29,6 +29,22 @@ function App() {
     }
   }, []);
 
+  if (!process.env.API_KEY) {
+    return (
+      <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 to-gray-900 text-white p-4 flex items-center justify-center">
+        <div className="w-full max-w-2xl bg-red-900/50 border border-red-700 text-red-300 px-6 py-8 rounded-lg text-center" role="alert">
+          <h1 className="text-2xl font-bold mb-4">Erro de Configuração</h1>
+          <p className="text-lg">
+            A chave de API do Google Gemini não foi encontrada.
+          </p>
+          <p className="mt-2 text-slate-400">
+            Para que esta aplicação funcione, você precisa configurar a variável de ambiente <code className="bg-slate-700 px-2 py-1 rounded">API_KEY</code> nas configurações do seu projeto no Vercel (ou onde quer que esteja hospedado).
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 to-gray-900 text-white p-4 sm:p-6 lg:p-8">
       <main className="container mx-auto flex flex-col items-center justify-center space-y-8 py-10">
