@@ -9,6 +9,7 @@ A estrutura do projeto está organizada da seguinte forma para separar responsab
 ```
 .
 ├── App.tsx
+├── README.md
 ├── components
 │   ├── icons
 │   │   ├── CutleryIcon.tsx
@@ -28,6 +29,7 @@ A estrutura do projeto está organizada da seguinte forma para separar responsab
 -   **`index.html`**: O arquivo HTML principal, ponto de entrada da aplicação. Carrega os scripts necessários, incluindo React, TailwindCSS e o script principal da aplicação.
 -   **`index.tsx`**: Ponto de entrada do React. Renderiza o componente principal `App` no DOM.
 -   **`metadata.json`**: Contém metadados sobre a aplicação, como nome e descrição.
+-   **`README.md`**: Este arquivo. Contém a documentação sobre o projeto.
 -   **`App.tsx`**: O componente raiz da aplicação. Gerencia o estado principal (plano, carregamento, erros) e a lógica de renderização condicional.
 -   **`types.ts`**: Define os tipos e interfaces TypeScript utilizados em toda a aplicação (ex: `WeeklyPlan`, `TargetShape`).
 -   **`services/geminiService.ts`**: Módulo responsável pela comunicação com a API do Google Gemini. Contém a lógica para gerar o plano de emagrecimento, incluindo a definição do schema JSON esperado.
