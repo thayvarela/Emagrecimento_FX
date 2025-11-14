@@ -60,12 +60,13 @@ const planSchema = {
   required: ["plan"],
 };
 
-export const generatePlan = async (weight: number, height: number, shape: TargetShape): Promise<WeeklyPlan | null> => {
+export const generatePlan = async (weight: number, height: number, age: number, shape: TargetShape): Promise<WeeklyPlan | null> => {
   try {
     const prompt = `
       Crie um plano de emagrecimento e condicionamento físico detalhado de 7 dias para uma pessoa com as seguintes características:
       - Peso: ${weight} kg
       - Altura: ${height} cm
+      - Idade: ${age} anos
       - Objetivo de Shape: ${shape}
 
       O plano deve incluir:

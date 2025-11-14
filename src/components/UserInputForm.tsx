@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TargetShape } from '../types.ts';
 
 interface UserInputFormProps {
-  onGenerate: (weight: number, height: number, shape: TargetShape) => void;
+  onGenerate: (weight: number, height: number, age: number, shape: TargetShape) => void;
   isLoading: boolean;
 }
 
@@ -11,22 +11,23 @@ const shapeOptions = Object.values(TargetShape);
 export const UserInputForm: React.FC<UserInputFormProps> = ({ onGenerate, isLoading }) => {
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
+  const [age, setAge] = useState('');
   const [shape, setShape] = useState<TargetShape>(TargetShape.Slim);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (weight && height && shape) {
-      onGenerate(Number(weight), Number(height), shape);
+    if (weight && height && age && shape) {
+      onGenerate(Number(weight), Number(height), Number(age), shape);
     }
   };
 
-  const isFormValid = weight && height && shape;
+  const isFormValid = weight && height && age && shape;
 
   return (
     <div className="w-full max-w-2xl mx-auto bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-slate-700">
       <form onSubmit={handleSubmit} className="space-y-6">
         <h2 className="text-2xl font-bold text-center text-cyan-400 mb-6">Informe seus dados</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label htmlFor="weight" className="block text-sm font-medium text-slate-300 mb-2">Peso (kg)</label>
             <input
@@ -47,6 +48,18 @@ export const UserInputForm: React.FC<UserInputFormProps> = ({ onGenerate, isLoad
               value={height}
               onChange={(e) => setHeight(e.target.value)}
               placeholder="Ex: 180"
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
+              required
+            />
+          </div>
+           <div>
+            <label htmlFor="age" className="block text-sm font-medium text-slate-300 mb-2">Idade</label>
+            <input
+              type="number"
+              id="age"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
+              placeholder="Ex: 30"
               className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
               required
             />

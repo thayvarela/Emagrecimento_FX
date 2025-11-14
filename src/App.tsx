@@ -15,7 +15,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [weightInfo, setWeightInfo] = useState<WeightInfo | null>(null);
 
-  const handleGeneratePlan = useCallback(async (weight: number, height: number, shape: TargetShape) => {
+  const handleGeneratePlan = useCallback(async (weight: number, height: number, age: number, shape: TargetShape) => {
     setIsLoading(true);
     setError(null);
     setPlan(null);
@@ -29,7 +29,7 @@ function App() {
       const weightToLose = weight - idealWeight;
       setWeightInfo({ idealWeight, weightToLose });
 
-      const generatedPlan = await generatePlan(weight, height, shape);
+      const generatedPlan = await generatePlan(weight, height, age, shape);
       if (generatedPlan) {
         setPlan(generatedPlan);
       } else {
