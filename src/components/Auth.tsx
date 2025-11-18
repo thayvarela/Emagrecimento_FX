@@ -4,9 +4,10 @@ import { User } from '../types.ts';
 
 interface AuthProps {
   onLoginSuccess: (user: User) => void;
+  onBackToHome: () => void;
 }
 
-export const Auth: React.FC<AuthProps> = ({ onLoginSuccess }) => {
+export const Auth: React.FC<AuthProps> = ({ onLoginSuccess, onBackToHome }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +31,13 @@ export const Auth: React.FC<AuthProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-slate-700">
+    <div className="w-full max-w-md mx-auto bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-slate-700 relative">
+       <button onClick={onBackToHome} className="absolute top-4 left-4 text-slate-400 hover:text-white transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
       <h2 className="text-3xl font-bold text-center text-cyan-400 mb-6">{isLogin ? 'Login' : 'Cadastro'}</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -77,7 +84,7 @@ export const Auth: React.FC<AuthProps> = ({ onLoginSuccess }) => {
             <div className="w-full border-t border-slate-600" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-slate-800/50 px-2 text-slate-400">Ou continue com</span>
+            <span className="bg-slate-800 px-2 text-slate-400">Ou continue com</span>
           </div>
         </div>
         <div>

@@ -8,8 +8,9 @@ import * as authService from './services/authService.ts';
 import * as planService from './services/planService.ts';
 import { Navbar } from './components/Navbar.tsx';
 import { SavedPlans } from './components/SavedPlans.tsx';
+import { HomePage } from './components/HomePage.tsx';
 
-type View = 'auth' | 'form' | 'plan' | 'saved_plans';
+type View = 'home' | 'auth' | 'form' | 'plan' | 'saved_plans';
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -17,7 +18,7 @@ function App() {
   const [currentPlan, setCurrentPlan] = useState<WeeklyPlan | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [view, setView] = useState<View>('auth');
+  const [view, setView] = useState<View>('home');
 
   useEffect(() => {
     const user = authService.getCurrentUser();
@@ -38,7 +39,7 @@ function App() {
     setCurrentUser(null);
     setCurrentPlan(null);
     setSavedPlans([]);
-    setView('auth');
+    setView('home');
   };
   
   const handleGeneratePlan = useCallback(async (weight: number, height: number, age: number, shape: TargetShape) => {
@@ -102,7 +103,13 @@ function App() {
 
   const renderContent = () => {
     if (!currentUser) {
-      return <Auth onLoginSuccess={handleLoginSuccess} />;
+       switch (view) {
+        case 'auth':
+          return <Auth onLoginSuccess={handleLoginSuccess} onBackToHome={() => setView('home')} />;
+        case 'home':
+        default:
+          return <HomePage onNavigateToAuth={() => setView('auth')} />;
+      }
     }
     switch (view) {
       case 'plan':
@@ -117,7 +124,19 @@ function App() {
         return <SavedPlans plans={savedPlans} onViewPlan={handleViewPlan} />;
       case 'form':
       default:
-        return <UserInputForm onGenerate={handleGeneratePlan} isLoading={isLoading} />;
+        return (
+          <>
+            <header className="text-center">
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-500">
+                Crie seu Plano
+              </h1>
+              <p className="mt-4 text-lg text-slate-400 max-w-3xl mx-auto">
+                Preencha seus dados para a IA gerar um plano de dieta e treino personalizado para você.
+              </p>
+            </header>
+            <UserInputForm onGenerate={handleGeneratePlan} isLoading={isLoading} />
+          </>
+        );
     }
   }
 
@@ -132,16 +151,8 @@ function App() {
         />
       )}
       <main className="container mx-auto flex flex-col items-center justify-center space-y-8 py-10">
-        <header className="text-center">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-500">
-            Plano de Emagrecimento com IA
-          </h1>
-          <p className="mt-4 text-lg text-slate-400 max-w-3xl mx-auto">
-            Receba um plano de dieta e treino personalizado, passo a passo, para alcançar o corpo dos seus sonhos.
-          </p>
-        </header>
-
-        {error && (
+        
+        {error && !isLoading && (
           <div className="w-full max-w-2xl bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-lg text-center" role="alert">
             <strong className="font-bold">Erro!</strong>
             <span className="block sm:inline ml-2">{error}</span>
