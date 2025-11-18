@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { WeeklyPlan, DailyPlan } from '../types.ts';
+import { WeeklyPlan, DailyPlan, TargetShape } from '../types.ts';
 import CutleryIcon from './icons/CutleryIcon.tsx';
 import DumbbellIcon from './icons/DumbbellIcon.tsx';
 
 interface PlanDisplayProps {
   planData: WeeklyPlan;
-  weightInfo: {
-    idealWeight: number;
-    weightToLose: number;
-  };
+  onSavePlan: (plan: WeeklyPlan) => void;
+  isPlanSaved: boolean;
 }
 
 const DayCard: React.FC<{ dayPlan: DailyPlan }> = ({ dayPlan }) => (
@@ -20,7 +18,7 @@ const DayCard: React.FC<{ dayPlan: DailyPlan }> = ({ dayPlan }) => (
             </h3>
             <div className="space-y-4">
                 {dayPlan.meals.map((meal, index) => (
-                    <div key={index} className="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                    <div key={index} className="bg-slate-800 p-4 rounded-lg border border-slate-700 transition-shadow hover:shadow-lg">
                         <p className="font-bold text-slate-300">{meal.time}</p>
                         <p className="text-slate-400">{meal.description}</p>
                     </div>
@@ -33,8 +31,8 @@ const DayCard: React.FC<{ dayPlan: DailyPlan }> = ({ dayPlan }) => (
                 Plano de Treinos
             </h3>
             <div className="space-y-4">
-                 {dayPlan.workouts.length > 0 ? dayPlan.workouts.map((workout, index) => (
-                    <div key={index} className="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                 {dayPlan.workouts && dayPlan.workouts.length > 0 ? dayPlan.workouts.map((workout, index) => (
+                    <div key={index} className="bg-slate-800 p-4 rounded-lg border border-slate-700 transition-shadow hover:shadow-lg">
                         <p className="font-bold text-slate-300">{workout.time}</p>
                         <p className="text-slate-400 whitespace-pre-wrap">{workout.description}</p>
                     </div>
@@ -49,13 +47,15 @@ const DayCard: React.FC<{ dayPlan: DailyPlan }> = ({ dayPlan }) => (
     </div>
 );
 
-export const PlanDisplay: React.FC<PlanDisplayProps> = ({ planData, weightInfo }) => {
+export const PlanDisplay: React.FC<PlanDisplayProps> = ({ planData, onSavePlan, isPlanSaved }) => {
   const [activeDayIndex, setActiveDayIndex] = useState(0);
 
   const renderWeightInfo = () => {
-    if (!weightInfo) return null;
-
-    const { idealWeight, weightToLose } = weightInfo;
+    const { weight, height } = planData.userInput;
+    const heightInMeters = height / 100;
+    const targetBmi = 22.5; // A healthy BMI target
+    const idealWeight = targetBmi * (heightInMeters * heightInMeters);
+    const weightToLose = weight - idealWeight;
 
     if (weightToLose > 0) {
       return (
@@ -73,9 +73,19 @@ export const PlanDisplay: React.FC<PlanDisplayProps> = ({ planData, weightInfo }
     }
   };
 
+
   return (
     <div className="w-full max-w-4xl mx-auto bg-slate-800/50 backdrop-blur-sm p-6 md:p-8 rounded-2xl shadow-lg border border-slate-700 animate-fade-in">
-        <h2 className="text-3xl font-bold text-center text-cyan-400 mb-4">Seu Plano Semanal Personalizado</h2>
+        <div className="flex justify-between items-start mb-4">
+          <h2 className="text-3xl font-bold text-cyan-400">Seu Plano Personalizado</h2>
+           <button
+            onClick={() => onSavePlan(planData)}
+            disabled={isPlanSaved}
+            className="bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 shadow-md disabled:opacity-50"
+          >
+            {isPlanSaved ? 'Plano Salvo' : 'Salvar Plano'}
+          </button>
+        </div>
 
         <div className="text-center bg-slate-900/60 border border-slate-700 rounded-lg p-4 mb-6 text-slate-300">
           {renderWeightInfo()}
@@ -89,7 +99,7 @@ export const PlanDisplay: React.FC<PlanDisplayProps> = ({ planData, weightInfo }
                         onClick={() => setActiveDayIndex(index)}
                         className={`px-4 py-2 text-sm md:text-base font-semibold rounded-full transition-colors duration-200 whitespace-nowrap ${
                             activeDayIndex === index
-                            ? 'bg-cyan-500 text-white'
+                            ? 'bg-cyan-500 text-white shadow-lg'
                             : 'bg-slate-700 hover:bg-slate-600 text-slate-300'
                         }`}
                     >
@@ -105,10 +115,3 @@ export const PlanDisplay: React.FC<PlanDisplayProps> = ({ planData, weightInfo }
     </div>
   );
 };
-
-// Add fade-in animation to tailwind config or a global style if possible
-// For this single-file setup, we'll rely on a simple keyframe in the main App or here.
-// But since we cannot add CSS files, we can fake it with Tailwind classes on the main element.
-// In App.tsx, we can add a simple style tag if needed or just use animation classes.
-// The `animate-fade-in` class is a placeholder for a custom animation. We can define this in `index.html` style tag or rely on a framework like `framer-motion` if allowed.
-// For simplicity, let's assume `animate-fade-in` is defined.

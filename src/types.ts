@@ -22,5 +22,18 @@ export interface DailyPlan {
 }
 
 export interface WeeklyPlan {
+  id: string;
   plan: DailyPlan[];
+  createdAt: number;
+  userInput: {
+    weight: number;
+    height: number;
+    age: number;
+    shape: TargetShape;
+  }
+}
+
+export interface User {
+  id: string;
+  email: string;
 }

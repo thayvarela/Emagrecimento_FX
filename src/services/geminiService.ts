@@ -8,7 +8,7 @@ const planSchema = {
   properties: {
     plan: {
       type: Type.ARRAY,
-      description: "Um plano de 7 dias com refeições e treinos. Cada dia deve ter pelo menos 3 refeições e 1 treino.",
+      description: "Um plano de 7 dias com refeições e treinos. Cada dia deve ter pelo menos 3 refeições e 1 treino. Os dias devem estar em ordem, começando pela Segunda-feira.",
       items: {
         type: Type.OBJECT,
         properties: {
@@ -36,7 +36,7 @@ const planSchema = {
           },
           workouts: {
             type: Type.ARRAY,
-            description: "Lista de treinos para o dia.",
+            description: "Lista de treinos para o dia. Se for dia de descanso, este array pode estar vazio.",
             items: {
               type: Type.OBJECT,
               properties: {
@@ -60,7 +60,8 @@ const planSchema = {
   required: ["plan"],
 };
 
-export const generatePlan = async (weight: number, height: number, age: number, shape: TargetShape): Promise<WeeklyPlan | null> => {
+// We modify the return type to Omit the properties we will add manually
+export const generatePlan = async (weight: number, height: number, age: number, shape: TargetShape): Promise<Omit<WeeklyPlan, 'id' | 'createdAt' | 'userInput'> | null> => {
   try {
     const prompt = `
       Crie um plano de emagrecimento e condicionamento físico detalhado de 7 dias para uma pessoa com as seguintes características:
@@ -71,9 +72,10 @@ export const generatePlan = async (weight: number, height: number, age: number, 
 
       O plano deve incluir:
       1.  Refeições diárias (café da manhã, lanche, almoço, lanche, jantar) com horários e descrições claras.
-      2.  Treinos diários com horários e descrições detalhadas dos exercícios, incluindo séries e repetições.
+      2.  Treinos diários com horários e descrições detalhadas dos exercícios, incluindo séries e repetições. Se um dia for de descanso, o array de treinos pode ser vazio.
       3.  O plano deve ser realista, saudável e sustentável.
       4.  Assegure-se de que a resposta siga estritamente o schema JSON fornecido.
+      5. Os dias da semana devem ser retornados em ordem, de Segunda-feira a Domingo.
     `;
 
     const response = await ai.models.generateContent({
@@ -87,7 +89,7 @@ export const generatePlan = async (weight: number, height: number, age: number, 
     });
     
     const jsonText = response.text.trim();
-    const parsedPlan = JSON.parse(jsonText) as WeeklyPlan;
+    const parsedPlan = JSON.parse(jsonText) as { plan: WeeklyPlan['plan'] };
     
     // Basic validation
     if (parsedPlan && Array.isArray(parsedPlan.plan) && parsedPlan.plan.length > 0) {

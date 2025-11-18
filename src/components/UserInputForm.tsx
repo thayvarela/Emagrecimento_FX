@@ -9,9 +9,9 @@ interface UserInputFormProps {
 const shapeOptions = Object.values(TargetShape);
 
 export const UserInputForm: React.FC<UserInputFormProps> = ({ onGenerate, isLoading }) => {
-  const [weight, setWeight] = useState('');
-  const [height, setHeight] = useState('');
-  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('70');
+  const [height, setHeight] = useState('175');
+  const [age, setAge] = useState('30');
   const [shape, setShape] = useState<TargetShape>(TargetShape.Slim);
 
   const handleSubmit = (e: React.FormEvent) => {
